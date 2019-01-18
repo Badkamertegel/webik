@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+{% block main %}
+    <form action="{{ url_for('create') }}" method="post">
+        <html>
+            <body>
+                <p> {{ category }} </p>
+                <p> {{ vraag }} </p>
+                <p> {{ goed }} </p>
+                <p> {{ fout }} </p>
+                <p> {{ moeilijkheidsgraad }} </p>
+            </body>
+        </html>
+    </form>
+{% endblock %}
