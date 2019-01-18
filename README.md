@@ -6,7 +6,7 @@ Projectvoorstel Trivia
 In tegenstelling tot bestaande ‘learning platforms’, willen wij een platform maken waar leren belangrijker is dan winnen. In onze platform willen wij de leerlingen en leraren de mogelijk geven om zelf de categorieën en moeilijkheidsgraad te kiezen. Als een leerling een vraag fout beantwoordt, dan krijgt de leerling in dezelfde categorie een vraag terug met een andere moeilijkheidsgraad. Na afloop kunnen leerling en leraar de resultaten inzien. 
 
 # Schetsen
-![schets](Projectvoorstel.png)
+![schets](doc/projectvoorstel.png)
  
 
 # Features 
