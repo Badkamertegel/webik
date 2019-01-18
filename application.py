@@ -3,14 +3,19 @@
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
+from helpers import *
 from passlib.apps import custom_app_context as pwd_context
 from tempfile import mkdtemp
 import aiohttp, requests
 import urllib.request
 import json
+import os
 from pytrivia import Category, Diffculty, Type, Trivia
 
 app = Flask(__name__)
+app.secret_key = 'my unobvious secret key'
+
+db = SQL("sqlite:///project.db")
 
 data = Trivia(True)
 response = data.request(2, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
@@ -32,8 +37,6 @@ print(categorie, vraag, goed_antwoord, foute_antwoorden, moeilijkheidsgraad)
 @app.route("/index")
 def index():
 
-    categories = ['Maths', 'History']
-
     if request.method =="POST":
 
         return redirect(url_for("create.html"))
@@ -41,10 +44,7 @@ def index():
     else:
         # print(categorie)
         return render_template("index.html", category=categorie, vraag=vraag, goed=goed_antwoord, fout=foute_antwoorden, moeilijkheidsgraad=moeilijkheidsgraad)
-@app.route("/")
-@login_required
-def index():
-    return apology("TODO", 200)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -116,7 +116,7 @@ def login():
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        return render_template("index.html")
 
 
 @app.route("/teacherlogin", methods=["GET","POST"])
@@ -184,3 +184,18 @@ def teacherRegister():
         return redirect(url_for("index"))
     else:
         return render_template("register.html")
+
+@app.route("/", methods=["GET","POST"])
+def homepage():
+
+    return render_template("homepage.html")
+
+@app.route("/result_student", methods=["GET","POST"])
+def result_student():
+
+    return render_template("result_student.html")
+
+@app.route("/result_teacher", methods=["GET","POST"])
+def result_teacher():
+
+    return render_template("result_teacher.html")
