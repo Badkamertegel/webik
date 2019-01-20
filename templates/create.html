@@ -1,15 +1,45 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Create a quiz</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-{% block main %}
-    <form action="{{ url_for('create') }}" method="post">
-        <html>
-            <body>
-                <p> {{ category }} </p>
-                <p> {{ vraag }} </p>
-                <p> {{ goed }} </p>
-                <p> {{ fout }} </p>
-                <p> {{ moeilijkheidsgraad }} </p>
-            </body>
-        </html>
-    </form>
-{% endblock %}
+<div class="container">
+  <h2>Create a quiz</h2>
+  <form class="form-inline well">
+    <div class="form-group">
+      <label for="sel1">Category (select one):</label>
+      <select class="form-control" id="sel1">
+        {% for category in categories %}
+        <option>{{ category }}</option>
+        {% endfor %}
+      </select>
+      <br>
+    </div>
+
+    <div class="form-group">
+      <label for="sel1">Difficulty:</label>
+      <select class="form-control" id="sel1">
+         {% for dif in difficulty %}
+        <option>{{ dif }}</option>
+        {% endfor %}
+      </select>
+      <br>
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" name="questions" placeholder="Number of Questions" type="number" min="1"/>
+    </div>
+</form>
+</div>
+    <div class="form-group" style="text-align: center;">
+        <button class="btn btn-default" type="submit">Create Quiz</button>
+    </div>
+</body>
+</html>

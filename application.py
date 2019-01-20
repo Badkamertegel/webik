@@ -20,6 +20,8 @@ db = SQL("sqlite:///project.db")
 data = Trivia(True)
 response = data.request(2, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
 informatie = []
+categories = ["Maths", "History"]
+difficulty = ["Easy", "Medium", "Hard"]
 
 for info in response['results']:
     informatie.append(info)
@@ -34,8 +36,8 @@ for element in range(len(informatie)):
 print(categorie, vraag, goed_antwoord, foute_antwoorden, moeilijkheidsgraad)
 
 
-@app.route("/index")
-def index():
+@app.route("/create")
+def create():
 
     if request.method =="POST":
 
@@ -43,7 +45,12 @@ def index():
 
     else:
         # print(categorie)
-        return render_template("index.html", category=categorie, vraag=vraag, goed=goed_antwoord, fout=foute_antwoorden, moeilijkheidsgraad=moeilijkheidsgraad)
+        return render_template("create.html", category=categorie, vraag=vraag, goed=goed_antwoord, fout=foute_antwoorden, moeilijkheidsgraad=moeilijkheidsgraad, categories=categories, difficulty=difficulty)
+
+@app.route("/game")
+def game():
+
+    return render_template("game.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
