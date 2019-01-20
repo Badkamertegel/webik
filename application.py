@@ -90,7 +90,7 @@ def register():
 
 
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def login():
     """Log user in."""
 
@@ -119,11 +119,11 @@ def login():
         session["user_id"] = rows[0]["id"]
 
         # redirect user to home page
-        return redirect(url_for("index"))
+        return redirect(url_for("login"))
 
     # else if user reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("index.html")
+        return render_template("login.html")
 
 
 @app.route("/teacherlogin", methods=["GET","POST"])
@@ -195,7 +195,7 @@ def teacherRegister():
 @app.route("/", methods=["GET","POST"])
 def homepage():
 
-    return render_template("homepage.html")
+    return render_template("login.html")
 
 @app.route("/result_student", methods=["GET","POST"])
 def result_student():

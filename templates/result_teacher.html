@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Result student
+{% endblock %}
+
+{% block main %}
+<head>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Student 1</button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="http://www.google.com">Student 1</a>
+        <a class="dropdown-item" href="#">Student 2</a>
+        <a class="dropdown-item" href="#">Student 3</a>
+      </div>
+    </div>
+</head>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Category</th>
+      <th scope="col">Difficulty</th>
+      <th scope="col">Correct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>History</td>
+      <td>Hard</td>
+      <td>4/10</td>
+    </tr>
+    <tr>
+      <td>Maths</td>
+      <td>Medium</td>
+      <td>7/10</td>
+    </tr>
+    <tr>
+      <td>Geography</td>
+      <td>Easy</td>
+      <td>9/10</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
