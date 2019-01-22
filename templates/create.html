@@ -9,16 +9,16 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+{% block main %}
 <div class="container">
   <h2>Create a quiz</h2>
   <form class="form-inline well">
     <div class="form-group">
       <label for="sel1">Category (select one):</label>
       <select class="form-control" id="sel1">
-
-        <option>{{ category }}</option>
-
+        {% for cat in category %}
+        <option>{{ cat }}</option>
+        {% endfor %}
       </select>
       <br>
     </div>
@@ -26,9 +26,9 @@
     <div class="form-group">
       <label for="sel1">Difficulty:</label>
       <select class="form-control" id="sel1">
-
-        <option>{{ moeilijkheidsgraad }}</option>
-
+        {% for dif in difficulty %}
+        <option>{{ dif }}</option>
+        {% endfor %}
       </select>
       <br>
     </div>
@@ -43,5 +43,6 @@
         <button class="btn btn-default" type="submit">Create Quiz</button>
     </div>
   </form>
+{% endblock %}
 </body>
 </html>

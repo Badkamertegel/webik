@@ -17,31 +17,86 @@ app.secret_key = 'my unobvious secret key'
 
 db = SQL("sqlite:///project.db")
 
+category = ["General", "Geography", "History", "Maths", "Politics"]
+difficulty = ["Easy", "Medium", "Hard"]
 data = Trivia(True)
-response = data.request(1, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-informatie = []
+general_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
+general_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
+general_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
 
-for info in response['results']:
-    informatie.append(info)
+geography_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
+geography_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
+geography_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
 
-categorie = []
-vraag = []
-goed_antwoord = []
-foute_antwoorden = []
-moeilijkheidsgraad = []
+history_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
+history_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
+history_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
 
-for element in range(len(informatie)):
-    categorie.append(informatie[element]['category'])
-    vraag.append(informatie[element]['question'])
-    goed_antwoord.append(informatie[element]['correct_answer'])
-    foute_antwoorden.append(informatie[element]['incorrect_answers'])
-    moeilijkheidsgraad.append(informatie[element]['difficulty'])
+maths_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
+maths_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
+maths_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
 
-print(foute_antwoorden[0][0])
+politics_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
+politics_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
+politics_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
+
+general_hard_list = []
+general_medium_list = []
+general_easy_list = []
+
+geography_hard_list = []
+geography_medium_list = []
+geography_easy_list = []
+
+history_hard_list = []
+history_medium_list = []
+history_easy_list = []
+
+maths_hard_list = []
+maths_medium_list = []
+maths_easy_list = []
+
+politics_hard_list = []
+politics_medium_list = []
+politics_easy_list = []
+
+for a in general_hard['results']:
+    general_hard_list.append(a)
+    for b in general_medium['results']:
+        general_medium_list.append(b)
+        for c in general_easy['results']:
+            general_easy_list.append(c)
+
+for a in geography_hard['results']:
+    geography_hard_list.append(a)
+    for b in geography_medium['results']:
+        geography_medium_list.append(b)
+        for c in geography_easy['results']:
+            geography_easy_list.append(c)
+
+for a in history_hard['results']:
+    history_hard_list.append(a)
+    for b in history_medium['results']:
+        history_medium_list.append(b)
+        for c in history_easy['results']:
+            history_easy_list.append(c)
 
 
+for a in maths_hard['results']:
+    maths_hard_list.append(a)
+    for b in maths_medium['results']:
+        maths_medium_list.append(b)
+        for c in maths_easy['results']:
+            maths_easy_list.append(c)
 
+for a in politics_hard['results']:
+    politics_hard_list.append(a)
+    for b in politics_medium['results']:
+        politics_medium_list.append(b)
+        for c in politics_easy['results']:
+            politics_easy_list.append(c)
 
+print(general_medium_list)
 
 @app.route("/create")
 @login_required
@@ -61,7 +116,7 @@ def create():
 
     else:
         # print(categorie)
-        return render_template("create.html", category=categorie, vraag=vraag, goed=goed_antwoord, fout=foute_antwoorden, moeilijkheidsgraad=moeilijkheidsgraad)
+        return render_template("create.html", difficulty = difficulty, category = category)
 
 @app.route("/game")
 @login_required
