@@ -20,25 +20,25 @@ db = SQL("sqlite:///project.db")
 category = ["General", "Geography", "History", "Maths", "Politics"]
 difficulty = ["Easy", "Medium", "Hard"]
 data = Trivia(True)
-general_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-general_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
-general_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
+# general_hard = data.request(20, Category.General ,Diffculty.Hard, Type.Multiple_Choice)
+general_medium = data.request(5, Category.General ,Diffculty.Medium, Type.Multiple_Choice)
+# general_easy = data.request(20, Category.General ,Diffculty.Easy, Type.Multiple_Choice)
 
-geography_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-geography_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
-geography_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
+# geography_hard = data.request(20, Category.Geography ,Diffculty.Hard, Type.Multiple_Choice)
+# geography_medium = data.request(20, Category.Geography ,Diffculty.Medium, Type.Multiple_Choice)
+# geography_easy = data.request(20, Category.Geography ,Diffculty.Easy, Type.Multiple_Choice)
 
-history_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-history_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
-history_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
+# history_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
+# history_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
+# history_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
 
-maths_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-maths_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
-maths_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
+# maths_hard = data.request(20, Category.Maths ,Diffculty.Hard, Type.Multiple_Choice)
+# maths_medium = data.request(20, Category.Maths ,Diffculty.Medium, Type.Multiple_Choice)
+# maths_easy = data.request(20, Category.Maths ,Diffculty.Easy, Type.Multiple_Choice)
 
-politics_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-politics_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
-politics_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
+# politics_hard = data.request(20, Category.Politics ,Diffculty.Hard, Type.Multiple_Choice)
+# politics_medium = data.request(20, Category.Politics ,Diffculty.Medium, Type.Multiple_Choice)
+# politics_easy = data.request(20, Category.Politics ,Diffculty.Easy, Type.Multiple_Choice)
 
 general_hard_list = []
 general_medium_list = []
@@ -60,43 +60,40 @@ politics_hard_list = []
 politics_medium_list = []
 politics_easy_list = []
 
-for a in general_hard['results']:
-    general_hard_list.append(a)
-    for b in general_medium['results']:
-        general_medium_list.append(b)
-        for c in general_easy['results']:
-            general_easy_list.append(c)
-
-for a in geography_hard['results']:
-    geography_hard_list.append(a)
-    for b in geography_medium['results']:
-        geography_medium_list.append(b)
-        for c in geography_easy['results']:
-            geography_easy_list.append(c)
-
-for a in history_hard['results']:
-    history_hard_list.append(a)
-    for b in history_medium['results']:
-        history_medium_list.append(b)
-        for c in history_easy['results']:
-            history_easy_list.append(c)
+for b in general_medium['results']:
+    general_medium_list.append(b)
 
 
-for a in maths_hard['results']:
-    maths_hard_list.append(a)
-    for b in maths_medium['results']:
-        maths_medium_list.append(b)
-        for c in maths_easy['results']:
-            maths_easy_list.append(c)
+# for a in geography_hard['results']:
+#     geography_hard_list.append(a)
+#     for b in geography_medium['results']:
+#         geography_medium_list.append(b)
+#         for c in geography_easy['results']:
+#             geography_easy_list.append(c)
 
-for a in politics_hard['results']:
-    politics_hard_list.append(a)
-    for b in politics_medium['results']:
-        politics_medium_list.append(b)
-        for c in politics_easy['results']:
-            politics_easy_list.append(c)
+# for a in history_hard['results']:
+#     history_hard_list.append(a)
+#     for b in history_medium['results']:
+#         history_medium_list.append(b)
+#         for c in history_easy['results']:
+#             history_easy_list.append(c)
 
-print(general_medium_list)
+
+# for a in maths_hard['results']:
+#     maths_hard_list.append(a)
+#     for b in maths_medium['results']:
+#         maths_medium_list.append(b)
+#         for c in maths_easy['results']:
+#             maths_easy_list.append(c)
+
+# for a in politics_hard['results']:
+#     politics_hard_list.append(a)
+#     for b in politics_medium['results']:
+#         politics_medium_list.append(b)
+#         for c in politics_easy['results']:
+#             politics_easy_list.append(c)
+
+print(general_medium_list[0])
 
 @app.route("/create")
 @login_required
@@ -130,7 +127,7 @@ def game():
             counter += 1
 
 
-        return render_template("game.html", categorie=categorie[0], vraag = vraag[0], moeilijkheidsgraad = moeilijkheidsgraad[0], goed = goed_antwoord[0], fout_1 = foute_antwoorden[0][0], fout_2 = foute_antwoorden[0][1], fout_3 = foute_antwoorden[0][2])
+        return render_template("game.html", general_medium_list = general_medium_list)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -218,7 +215,7 @@ def homepage():
 @login_required
 def result_student():
 
-    return render_template("result_student.html", categorie = categorie, moeilijkheidsgraad = moeilijkheidsgraad, counter = counter)
+    return render_template("result_student.html",)
 
 @app.route("/result_teacher", methods=["GET","POST"])
 @login_required
@@ -236,5 +233,58 @@ def logout():
     # redirect user to login form
     return redirect(url_for("login"))
 
+@app.route("/game2")
+@login_required
+def game2():
+
+    if request.method == "GET":
+
+        counter = 0
+
+        if request.form.get("goed"):
+            counter += 1
 
 
+        return render_template("game2.html", general_medium_list = general_medium_list)
+
+@app.route("/game3")
+@login_required
+def game3():
+
+    if request.method == "GET":
+
+        counter = 0
+
+        if request.form.get("goed"):
+            counter += 1
+
+
+        return render_template("game3.html", general_medium_list = general_medium_list)
+
+@app.route("/game4")
+@login_required
+def game4():
+
+    if request.method == "GET":
+
+        counter = 0
+
+        if request.form.get("goed"):
+            counter += 1
+
+
+        return render_template("game4.html", general_medium_list = general_medium_list)
+
+@app.route("/game5")
+@login_required
+def game5():
+
+    if request.method == "GET":
+
+        counter = 0
+
+        if request.form.get("goed"):
+            counter += 1
+
+
+        return render_template("game5.html", general_medium_list = general_medium_list)
