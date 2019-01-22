@@ -172,5 +172,14 @@ def result_teacher():
 
         return render_template("result_teacher.html")
 
+@app.route("/logout")
+def logout():
+
+    # forget any user_id
+    session.clear()
+
+    # redirect user to login form
+    return redirect(url_for("login"))
+
 
 
