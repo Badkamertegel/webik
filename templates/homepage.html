@@ -18,6 +18,7 @@
 </head>
 <body>
 
+{% if session.user_id %}
 <center><form class="form-inline" method="get" action="/game">
 
   <div class="form-group" style="text-align: center; vertical-align: middle">
@@ -30,7 +31,9 @@
   </div>
 
 </form></center>
+{% endif %}
 
+{% if session.user_id %}
 <center><form class="form-inline" method="get" action="/create">
 
   <div class="form-group" style="text-align: center; vertical-align: middle">
@@ -44,6 +47,7 @@
   </div>
 
 </form></center>
+{% endif %}
 
 </body>
 </html>
