@@ -1,7 +1,7 @@
 
- #Technisch ontwerp
+# Technisch ontwerp
 
-#Lijst plugins en frameworks:
+# Lijst plugins en frameworks:
 -Flask framework: https://www.fullstackpython.com/flask.html 
 -SQL plugin: https://www.w3schools.com/sql/sql_intro.asp 
 -Bootstrap: https://getbootstrap.com/docs/4.2/getting-started/introduction/ 
@@ -21,7 +21,7 @@
 ![](Projectvoorstel.png)
 
 
-#Helpers:
+# Helpers:
 
 - Een functie zoals Apology(): dient als foutmelding bij bijvoorbeeld een opengelaten veld bij de registratie of tijdens het inloggen.
 - een login required functie, geeft aan dat een gebruiker moet inloggen.
@@ -29,7 +29,7 @@
 
 
 
-#View bestanden:
+# View bestanden:
 
 
 - apology.html
