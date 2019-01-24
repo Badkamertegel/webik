@@ -7,33 +7,28 @@
 {% endblock %}
 
 {% block main %}
-<html lang="en">
-<head>
-  <title>Play the quiz</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
+
+{% if session.user_id %}
 <body>
     <div style = "text-align: center;">
-        <p>Question 1: {{ general_medium_list[0]['question'] }}</p>
-        <p>Category: {{ general_medium_list[0]['category'] }}</p>
-        <p>Difficulty: {{ general_medium_list[0]['difficulty'] }}</p>
+        <p>Question 1: {{ api_data[0]['question'] }}</p>
+        <p>Category: {{ api_data[0]['category'] }}</p>
+        <p>Difficulty: {{ api_data[0]['difficulty'] }}</p>
     </div>
 
-<form method="get" action="/game2">
+<form method="get" action="/result_student">
 
     <div class="form-group" style="text-align: center;" >
-        <button class="btn btn-default" name = "goed" type="submit">{{ general_medium_list[0]['correct_answer'] }}</button>
-        <button class="btn btn-default" name = "fout_1" type="submit">{{ general_medium_list[0]['incorrect_answers'][0] }}</button>
+        <button class="btn btn-default" name = "goed" type="submit">{{ api_data[0]['correct_answer'] }}</button>
+        <button class="btn btn-default" name = "fout_1" type="submit">{{ api_data[0]['incorrect_answers'][0] }}</button>
     </div>
     <div class="form-group" style="text-align: center;" >
-        <button class="btn btn-default" name = "fout_2" ype="submit">{{ general_medium_list[0]['incorrect_answers'][1] }}</button>
-        <button class="btn btn-default" name = "fout_3" type="submit">{{ general_medium_list[0]['incorrect_answers'][2] }}</button>
+        <button class="btn btn-default" name = "fout_2" ype="submit">{{ api_data[0]['incorrect_answers'][1] }}</button>
+        <button class="btn btn-default" name = "fout_3" type="submit">{{ api_data[0]['incorrect_answers'][2] }}</button>
     </div>
 </form>
+
+{% endif %}
 
 </body>
 </html>
