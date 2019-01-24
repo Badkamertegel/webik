@@ -10,29 +10,31 @@
 
 {% if session.user_id %}
 
-<script  language="JavaScript">
-function refreshDiv(divId) {
-var curDivContent = document.getElementById(divId).innerHTML;
-document.getElementById(divId).innerHTML = curDivContent;
+{% set count = 0 %}
+{% for count in range(api_data|length) %}
+<script type="text/javascript">
+var count = '{{ count }}';
+function increment(){
+    count = '{% set count = count + 1 %}';
 }
 </script>
-
+{% endfor %}
 <body>
     <div style = "text-align: center;" id="refresh">
-        <p>Question 1: {{ api_data[0]['question'] }}</p>
+        <p>Question 1: {{ api_data[count]['question'] }}</p>
         <p>Category: {{ api_data[0]['category'] }}</p>
         <p>Difficulty: {{ api_data[0]['difficulty'] }}</p>
     </div>
 
 <form method="get">
 
-    <div class="form-group" style="text-align: center;" id="refresh">
-        <button class="btn btn-default" name = "goed" type="submit" onclick="refreshDiv('refresh');">{{ api_data[0]['correct_answer'] }}</button>
-        <button class="btn btn-default" name = "fout_1" type="submit" onclick="refreshDiv('refresh');">{{ api_data[0]['incorrect_answers'][0] }}</button>
+    <div class="form-group" style="text-align: center;" id="refresh" onClick="increment()">
+        <button class="btn btn-default" name = "goed" type="submit" >{{ api_data[0]['correct_answer'] }}</button>
+        <button class="btn btn-default" name = "fout_1" type="submit" >{{ api_data[0]['incorrect_answers'][0] }}</button>
     </div>
     <div class="form-group" style="text-align: center;" id="refresh">
-        <button class="btn btn-default" name = "fout_2" ype="submit" onclick="refreshDiv('refresh');">{{ api_data[0]['incorrect_answers'][1] }}</button>
-        <button class="btn btn-default" name = "fout_3" type="submit" onclick="refreshDiv('refresh');">{{ api_data[0]['incorrect_answers'][2] }}</button>
+        <button class="btn btn-default" name = "fout_2" ype="submit" >{{ api_data[0]['incorrect_answers'][1] }}</button>
+        <button class="btn btn-default" name = "fout_3" type="submit" >{{ api_data[0]['incorrect_answers'][2] }}</button>
     </div>
 </form>
 
