@@ -11,123 +11,51 @@ import urllib.request
 import json
 import os
 from pytrivia import Category, Diffculty, Type, Trivia
+from enum import Enum
 
 app = Flask(__name__)
 app.secret_key = 'my unobvious secret key'
 
 db = SQL("sqlite:///project.db")
 
-category = ["General", "Geography", "History", "Maths", "Politics"]
-difficulty = ["Easy", "Medium", "Hard"]
+category = ["general", "geography", "history", "film", "nature", "music"]
+difficulty = ["easy", "medium", "hard"]
 data = Trivia(True)
-# general_hard = data.request(20, Category.General ,Diffculty.Hard, Type.Multiple_Choice)
-general_medium = data.request(5, Category.General ,Diffculty.Medium, Type.Multiple_Choice)
-# general_easy = data.request(20, Category.General ,Diffculty.Easy, Type.Multiple_Choice)
 
-# geography_hard = data.request(20, Category.Geography ,Diffculty.Hard, Type.Multiple_Choice)
-# geography_medium = data.request(20, Category.Geography ,Diffculty.Medium, Type.Multiple_Choice)
-# geography_easy = data.request(20, Category.Geography ,Diffculty.Easy, Type.Multiple_Choice)
+quiz_namen = db.execute("SELECT quiz FROM maken")
+print(quiz_namen[0]["quiz"])
 
-# history_hard = data.request(20, Category.History ,Diffculty.Hard, Type.Multiple_Choice)
-# history_medium = data.request(20, Category.History ,Diffculty.Medium, Type.Multiple_Choice)
-# history_easy = data.request(20, Category.History ,Diffculty.Easy, Type.Multiple_Choice)
-
-# maths_hard = data.request(20, Category.Maths ,Diffculty.Hard, Type.Multiple_Choice)
-# maths_medium = data.request(20, Category.Maths ,Diffculty.Medium, Type.Multiple_Choice)
-# maths_easy = data.request(20, Category.Maths ,Diffculty.Easy, Type.Multiple_Choice)
-
-# politics_hard = data.request(20, Category.Politics ,Diffculty.Hard, Type.Multiple_Choice)
-# politics_medium = data.request(20, Category.Politics ,Diffculty.Medium, Type.Multiple_Choice)
-# politics_easy = data.request(20, Category.Politics ,Diffculty.Easy, Type.Multiple_Choice)
-
-general_hard_list = []
-general_medium_list = []
-general_easy_list = []
-
-geography_hard_list = []
-geography_medium_list = []
-geography_easy_list = []
-
-history_hard_list = []
-history_medium_list = []
-history_easy_list = []
-
-maths_hard_list = []
-maths_medium_list = []
-maths_easy_list = []
-
-politics_hard_list = []
-politics_medium_list = []
-politics_easy_list = []
-
-for b in general_medium['results']:
-    general_medium_list.append(b)
-
-
-# for a in geography_hard['results']:
-#     geography_hard_list.append(a)
-#     for b in geography_medium['results']:
-#         geography_medium_list.append(b)
-#         for c in geography_easy['results']:
-#             geography_easy_list.append(c)
-
-# for a in history_hard['results']:
-#     history_hard_list.append(a)
-#     for b in history_medium['results']:
-#         history_medium_list.append(b)
-#         for c in history_easy['results']:
-#             history_easy_list.append(c)
-
-
-# for a in maths_hard['results']:
-#     maths_hard_list.append(a)
-#     for b in maths_medium['results']:
-#         maths_medium_list.append(b)
-#         for c in maths_easy['results']:
-#             maths_easy_list.append(c)
-
-# for a in politics_hard['results']:
-#     politics_hard_list.append(a)
-#     for b in politics_medium['results']:
-#         politics_medium_list.append(b)
-#         for c in politics_easy['results']:
-#             politics_easy_list.append(c)
-
-print(general_medium_list[0])
-
-@app.route("/create")
+@app.route("/create", methods=["GET", "POST"])
 @login_required
 def create():
 
-    if request.method =="POST":
+    if request.method == "POST":
 
-        teacher_value = db.execute("SELECT teacher FROM user WHERE username = :username", username=request.form.get("username"))
-
-        if teacher_value == 1:
-            session["user_id"] = user
-        else:
-            session["user_id"] = teacher
-
-        return redirect(url_for("create.html"))
-
+        db.execute("INSERT INTO maken (quiz, category, difficulty, questions) VALUES (:quiz, :category, :difficulty, :questions)", quiz = request.form.get("quiz_name"), category = request.form.get("categorie"), difficulty = request.form.get("difficulty"), questions = request.form.get("questions"))
+        return redirect(url_for("game"))
 
     else:
-        # print(categorie)
-        return render_template("create.html", difficulty = difficulty, category = category)
+        return render_template("create.html", categorie = category, difficulty = difficulty)
 
-@app.route("/game")
+@app.route("/game", methods=["GET", "POST"])
 @login_required
 def game():
 
     if request.method == "GET":
 
-        counter = 0
+        category = db.execute("SELECT category FROM maken")[2]["category"]
+        difficulty = db.execute("SELECT difficulty FROM maken")[2]["difficulty"]
+        questions = db.execute("SELECT questions FROM maken")[2]["questions"]
 
-        if request.form.get("goed"):
-            counter += 1
+        dict_api = {'general': 9, 'geography': 22, 'history': 23, 'film': 11, 'nature': 17, 'music': 12}
+        dict_api_difficulty = {'hard': 'hard', 'medium': 'medium', 'easy': 'easy'}
+        x = dict_api[category]
+        y = dict_api_difficulty[difficulty]
+        main_api = "https://opentdb.com/api.php?"
+        url = main_api + urllib.parse.urlencode({'amount': questions}) +"&"+ urllib.parse.urlencode({'category': x}) +"&"+ urllib.parse.urlencode({'difficulty': y}) +"&"+ urllib.parse.urlencode({'type': 'multiple'})
+        api_data = requests.get(url).json()['results']
 
-
-        return render_template("game.html", general_medium_list = general_medium_list)
+        return render_template("game.html", api_data = api_data)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -209,7 +137,17 @@ def login():
 @login_required
 def homepage():
 
-    return render_template("homepage.html")
+    if request.method == "POST":
+
+        quiz_namen = db.execute("SELECT quiz FROM maken")
+
+        if request.form.get("join") == quiz_namen[0]["quiz"]:
+            return redirect(url_for("game"))
+        else:
+            return redirect(url_for("homepage"))
+
+    else:
+        return render_template("homepage.html")
 
 @app.route("/result_student", methods=["GET","POST"])
 @login_required
@@ -232,59 +170,3 @@ def logout():
 
     # redirect user to login form
     return redirect(url_for("login"))
-
-@app.route("/game2")
-@login_required
-def game2():
-
-    if request.method == "GET":
-
-        counter = 0
-
-        if request.form.get("goed"):
-            counter += 1
-
-
-        return render_template("game2.html", general_medium_list = general_medium_list)
-
-@app.route("/game3")
-@login_required
-def game3():
-
-    if request.method == "GET":
-
-        counter = 0
-
-        if request.form.get("goed"):
-            counter += 1
-
-
-        return render_template("game3.html", general_medium_list = general_medium_list)
-
-@app.route("/game4")
-@login_required
-def game4():
-
-    if request.method == "GET":
-
-        counter = 0
-
-        if request.form.get("goed"):
-            counter += 1
-
-
-        return render_template("game4.html", general_medium_list = general_medium_list)
-
-@app.route("/game5")
-@login_required
-def game5():
-
-    if request.method == "GET":
-
-        counter = 0
-
-        if request.form.get("goed"):
-            counter += 1
-
-
-        return render_template("game5.html", general_medium_list = general_medium_list)
