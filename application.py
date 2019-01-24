@@ -22,8 +22,6 @@ category = ["general", "geography", "history", "film", "nature", "music"]
 difficulty = ["easy", "medium", "hard"]
 data = Trivia(True)
 
-quiz_namen = db.execute("SELECT quiz FROM maken")
-print(quiz_namen[0]["quiz"])
 
 @app.route("/create", methods=["GET", "POST"])
 @login_required
@@ -31,8 +29,15 @@ def create():
 
     if request.method == "POST":
 
-        db.execute("INSERT INTO maken (quiz, category, difficulty, questions) VALUES (:quiz, :category, :difficulty, :questions)", quiz = request.form.get("quiz_name"), category = request.form.get("categorie"), difficulty = request.form.get("difficulty"), questions = request.form.get("questions"))
-        return redirect(url_for("game"))
+        cat = request.form.get("categorie")
+        dif = request.form.get("difficulty")
+        quiz = request.form.get("quiz_name")
+        questions = request.form.get("questions")
+
+        db.execute("INSERT INTO game (quiz, category, difficulty, questions) VALUES (:quiz, :cat, :dif, :questions)",
+                                quiz = quiz, cat = cat, dif = dif, questions = questions)
+
+        return redirect(url_for("homepage"))
 
     else:
         return render_template("create.html", categorie = category, difficulty = difficulty)
@@ -43,16 +48,17 @@ def game():
 
     if request.method == "GET":
 
-        category = db.execute("SELECT category FROM maken")[2]["category"]
-        difficulty = db.execute("SELECT difficulty FROM maken")[2]["difficulty"]
-        questions = db.execute("SELECT questions FROM maken")[2]["questions"]
+        cate = db.execute("SELECT category FROM game")[0]["category"]
+        diffi = db.execute("SELECT difficulty FROM game")[0]["difficulty"]
+        aantal_questions = db.execute("SELECT questions FROM game")[0]["questions"]
 
         dict_api = {'general': 9, 'geography': 22, 'history': 23, 'film': 11, 'nature': 17, 'music': 12}
         dict_api_difficulty = {'hard': 'hard', 'medium': 'medium', 'easy': 'easy'}
-        x = dict_api[category]
-        y = dict_api_difficulty[difficulty]
+        x = dict_api[cate]
+        y = dict_api_difficulty[diffi]
+
         main_api = "https://opentdb.com/api.php?"
-        url = main_api + urllib.parse.urlencode({'amount': questions}) +"&"+ urllib.parse.urlencode({'category': x}) +"&"+ urllib.parse.urlencode({'difficulty': y}) +"&"+ urllib.parse.urlencode({'type': 'multiple'})
+        url = main_api + urllib.parse.urlencode({'amount': aantal_questions}) +"&"+ urllib.parse.urlencode({'category': x}) +"&"+ urllib.parse.urlencode({'difficulty': y}) +"&"+ urllib.parse.urlencode({'type': 'multiple'})
         api_data = requests.get(url).json()['results']
 
         return render_template("game.html", api_data = api_data)
@@ -139,7 +145,7 @@ def homepage():
 
     if request.method == "POST":
 
-        quiz_namen = db.execute("SELECT quiz FROM maken")
+        quiz_namen = db.execute("SELECT quiz FROM game")
 
         if request.form.get("join") == quiz_namen[0]["quiz"]:
             return redirect(url_for("game"))
