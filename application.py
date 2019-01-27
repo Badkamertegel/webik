@@ -12,6 +12,8 @@ import json
 import os
 from pytrivia import Category, Diffculty, Type, Trivia
 from enum import Enum
+import random
+from random import shuffle
 
 app = Flask(__name__)
 app.secret_key = 'my unobvious secret key'
@@ -46,7 +48,11 @@ def create():
 @login_required
 def game():
 
-    if request.method == "GET":
+    print(request.method)
+    if request.method == "POST":
+
+        if str(request.form["button"]).strip() == str(request.form["answer"]).strip():
+            db.execute("UPDATE user SET counter = counter + 1 WHERE id = :id", id=session["user_id"])
 
         cate = db.execute("SELECT category FROM game")[0]["category"]
         diffi = db.execute("SELECT difficulty FROM game")[0]["difficulty"]
@@ -61,8 +67,54 @@ def game():
         url = main_api + urllib.parse.urlencode({'amount': aantal_questions}) +"&"+ urllib.parse.urlencode({'category': x}) +"&"+ urllib.parse.urlencode({'difficulty': y}) +"&"+ urllib.parse.urlencode({'type': 'multiple'})
         api_data = requests.get(url).json()['results']
 
-        return render_template("game.html", api_data = api_data)
+        mogelijkheden = []
 
+        for i in api_data:
+
+            vraag = api_data[0]['question']
+            goed = api_data[0]['correct_answer']
+            fout_1 = api_data[0]['incorrect_answers'][0]
+            fout_2 = api_data[0]['incorrect_answers'][1]
+            fout_3 = api_data[0]['incorrect_answers'][2]
+
+            mogelijkheden.append((goed, fout_1, fout_2, fout_3))
+
+        mogelijkheid = list(mogelijkheden[0])
+        random.shuffle(mogelijkheid)
+
+        return render_template("game.html", api_data = api_data, vraag = vraag, a=mogelijkheid[0], b=mogelijkheid[1], c=mogelijkheid[2], d=mogelijkheid[3], goed= goed, count=1)
+
+    else:
+
+        cate = db.execute("SELECT category FROM game")[0]["category"]
+        diffi = db.execute("SELECT difficulty FROM game")[0]["difficulty"]
+        aantal_questions = db.execute("SELECT questions FROM game")[0]["questions"]
+
+        dict_api = {'general': 9, 'geography': 22, 'history': 23, 'film': 11, 'nature': 17, 'music': 12}
+        dict_api_difficulty = {'hard': 'hard', 'medium': 'medium', 'easy': 'easy'}
+        x = dict_api[cate]
+        y = dict_api_difficulty[diffi]
+
+        main_api = "https://opentdb.com/api.php?"
+        url = main_api + urllib.parse.urlencode({'amount': aantal_questions}) +"&"+ urllib.parse.urlencode({'category': x}) +"&"+ urllib.parse.urlencode({'difficulty': y}) +"&"+ urllib.parse.urlencode({'type': 'multiple'})
+        api_data = requests.get(url).json()['results']
+
+        mogelijkheden = []
+
+        for i in api_data:
+
+            vraag = api_data[0]['question']
+            goed = api_data[0]['correct_answer']
+            fout_1 = api_data[0]['incorrect_answers'][0]
+            fout_2 = api_data[0]['incorrect_answers'][1]
+            fout_3 = api_data[0]['incorrect_answers'][2]
+
+            mogelijkheden.append((goed, fout_1, fout_2, fout_3))
+
+        mogelijkheid = list(mogelijkheden[0])
+        random.shuffle(mogelijkheid)
+
+        return render_template("game.html", api_data = api_data, vraag = vraag, a=mogelijkheid[0], b=mogelijkheid[1], c=mogelijkheid[2], d=mogelijkheid[3], goed= goed, count=2)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -88,7 +140,7 @@ def register():
             teacher = 0
 
 
-        result = db.execute("INSERT INTO user (username, hash, teacher) VALUES (:username, :hash, :teacher)",
+        result = db.execute("INSERT INTO user (username, hash, teacher, counter) VALUES (:username, :hash, :teacher, 0)",
                             username=request.form.get("username"), hash=pwd_context.hash(request.form.get("password")), teacher = teacher)
 
         if not result:
@@ -127,7 +179,6 @@ def login():
         if len(rows) != 1 or not pwd_context.verify(request.form.get("password"), rows[0]["hash"]):
              return "invalid username and/or password and/or teacher"
 
-
          # remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
@@ -148,6 +199,7 @@ def homepage():
         quiz_namen = db.execute("SELECT quiz FROM game")
 
         if request.form.get("join") == quiz_namen[0]["quiz"]:
+            db.execute("UPDATE user SET counter = 0 WHERE id = :id", id=session["user_id"])
             return redirect(url_for("game"))
         else:
             return redirect(url_for("homepage"))
