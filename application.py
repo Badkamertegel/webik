@@ -24,6 +24,26 @@ category = ["general", "geography", "history", "film", "nature", "music"]
 difficulty = ["easy", "medium", "hard"]
 data = Trivia(True)
 
+a = db.execute("SELECT quiz, quiz_id FROM game")
+lijst = []
+for b in a:
+    tijdelijk = []
+    tijdelijk.append(b['quiz'])
+    tijdelijk.append(b['quiz_id'])
+    lijst.append(tijdelijk)
+print(lijst)
+
+lijst_2 = []
+cate = db.execute("SELECT category FROM game")
+for categ in cate:
+    lijst_2.append(categ['category'])
+print(lijst_2)
+
+quiz_id = db.execute("SELECT quiz_id FROM game")
+lijst_3 = []
+for idd in quiz_id:
+    lijst_3.append(idd['quiz_id'])
+print(lijst_3)
 
 @app.route("/create", methods=["GET", "POST"])
 @login_required
@@ -36,7 +56,7 @@ def create():
         quiz = request.form.get("quiz_name")
         questions = request.form.get("questions")
 
-        db.execute("INSERT INTO game (quiz, category, difficulty, questions) VALUES (:quiz, :cat, :dif, :questions)",
+        db.execute("INSERT INTO game (quiz, category, difficulty, questions, vragen_count) VALUES (:quiz, :cat, :dif, :questions, '1')",
                                 quiz = quiz, cat = cat, dif = dif, questions = questions)
 
         return redirect(url_for("homepage"))
@@ -53,10 +73,13 @@ def game():
 
         if str(request.form["button"]).strip() == str(request.form["answer"]).strip():
             db.execute("UPDATE user SET counter = counter + 1 WHERE id = :id", id=session["user_id"])
+        if request.form.get("button"):
+            db.execute("UPDATE game SET vragen_count = vragen_count + 1")
 
-        cate = db.execute("SELECT category FROM game")[0]["category"]
-        diffi = db.execute("SELECT difficulty FROM game")[0]["difficulty"]
-        aantal_questions = db.execute("SELECT questions FROM game")[0]["questions"]
+        vragen_count = db.execute("SELECT vragen_count FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]['vragen_count']
+        cate = db.execute("SELECT category FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]["category"]
+        diffi = db.execute("SELECT difficulty FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]["difficulty"]
+        aantal_questions = db.execute("SELECT questions FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]["questions"]
 
         dict_api = {'general': 9, 'geography': 22, 'history': 23, 'film': 11, 'nature': 17, 'music': 12}
         dict_api_difficulty = {'hard': 'hard', 'medium': 'medium', 'easy': 'easy'}
@@ -82,13 +105,17 @@ def game():
         mogelijkheid = list(mogelijkheden[0])
         random.shuffle(mogelijkheid)
 
-        return render_template("game.html", api_data = api_data, vraag = vraag, a=mogelijkheid[0], b=mogelijkheid[1], c=mogelijkheid[2], d=mogelijkheid[3], goed= goed, count=1)
+        if vragen_count > aantal_questions:
+            return redirect(url_for("result_student"))
+        else:
+            return render_template("game.html", api_data = api_data, vraag = vraag, a=mogelijkheid[0], b=mogelijkheid[1], c=mogelijkheid[2], d=mogelijkheid[3], goed= goed, count=vragen_count)
 
     else:
 
-        cate = db.execute("SELECT category FROM game")[0]["category"]
-        diffi = db.execute("SELECT difficulty FROM game")[0]["difficulty"]
-        aantal_questions = db.execute("SELECT questions FROM game")[0]["questions"]
+        vragen_count = db.execute("SELECT vragen_count FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]['vragen_count']
+        cate = db.execute("SELECT category FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]["category"]
+        diffi = db.execute("SELECT difficulty FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]["difficulty"]
+        aantal_questions = db.execute("SELECT questions FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]["questions"]
 
         dict_api = {'general': 9, 'geography': 22, 'history': 23, 'film': 11, 'nature': 17, 'music': 12}
         dict_api_difficulty = {'hard': 'hard', 'medium': 'medium', 'easy': 'easy'}
@@ -114,7 +141,7 @@ def game():
         mogelijkheid = list(mogelijkheden[0])
         random.shuffle(mogelijkheid)
 
-        return render_template("game.html", api_data = api_data, vraag = vraag, a=mogelijkheid[0], b=mogelijkheid[1], c=mogelijkheid[2], d=mogelijkheid[3], goed= goed, count=2)
+        return render_template("game.html", api_data = api_data, vraag = vraag, a=mogelijkheid[0], b=mogelijkheid[1], c=mogelijkheid[2], d=mogelijkheid[3], goed= goed, count=vragen_count)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -196,10 +223,15 @@ def homepage():
 
     if request.method == "POST":
 
-        quiz_namen = db.execute("SELECT quiz FROM game")
+        quiz_namen = db.execute("SELECT quiz, quiz_id FROM game")
+        quiz_namen_lijst = []
+        for quiz_naam in quiz_namen:
+            quiz_namen_lijst.append(quiz_naam['quiz'])
 
-        if request.form.get("join") == quiz_namen[0]["quiz"]:
+        if request.form.get("join") in quiz_namen_lijst:
             db.execute("UPDATE user SET counter = 0 WHERE id = :id", id=session["user_id"])
+            db.execute("UPDATE game SET vragen_count = 1 WHERE quiz=:quiz", quiz = request.form.get("join"))
+            session['game'] = request.form.get("join")
             return redirect(url_for("game"))
         else:
             return redirect(url_for("homepage"))
@@ -211,7 +243,13 @@ def homepage():
 @login_required
 def result_student():
 
-    return render_template("result_student.html",)
+    result_category = db.execute("SELECT category FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]['category']
+    result_difficulty= db.execute("SELECT difficulty FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]['difficulty']
+    result_score = db.execute("SELECT counter FROM user WHERE id=:id", id=session['user_id'])[0]['counter']
+    result_total = db.execute("SELECT questions FROM game WHERE quiz = :quiz_name", quiz_name = session['game'])[0]['questions']
+    gebruiker = db.execute("SELECT username FROM user WHERE id=:id", id= session['user_id'])[0]['username']
+
+    return render_template("result_student.html", username=gebruiker, quiz=session['game'], result_category=result_category, result_difficulty=result_difficulty, result_score=result_score, result_total=result_total)
 
 @app.route("/result_teacher", methods=["GET","POST"])
 @login_required

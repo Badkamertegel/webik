@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+
 
 {% block title %}
     Result student
@@ -9,6 +9,8 @@
 <table class="table">
   <thead>
     <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Quiz Name</th>
       <th scope="col">Category</th>
       <th scope="col">Difficulty</th>
       <th scope="col">Correct</th>
@@ -16,9 +18,11 @@
   </thead>
   <tbody>
     <tr>
-      <td>General Knowledge</td>
-      <td>Medium</td>
-      <td>5/5</td>
+      <td>{{ username }}</td>
+      <td>{{ quiz }}</td>
+      <td>{{ result_category }}</td>
+      <td>{{ result_difficulty }}</td>
+      <td>{{ result_score }} / {{ result_total }}</td>
     </tr>
   </tbody>
 </table>
