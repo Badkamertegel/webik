@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block main %}
+<head>
+    <form method="post">
+    <center>
+    <div class="form-group">
+      <label>Quizes:</label>
+      <select class="form-control" name="quiz_result" style="width: 300px">
+        {% for quiz in quizes %}
+        <option>{{ quiz }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div style="position:absolute; left:0px; top:60px">
+      <p>Category: {{ categorie_result }}</p>
+    </div>
+    <div style="position:absolute; left:0px; top:100px">
+      <p>Difficulty: {{ difficulty_result }}</p>
+    </div>
+    <div style="position:absolute; left:0px; top:140px">
+      <p>Quiz Name: {{ name_result }}</p>
+    </div>
+    <div class="form-group" style="margin-top:17px;">
+      <button class="btn btn-info btn-lg" type="submit" value="submit">Load Results</button>
+    </div>
+    </center>
+    </form>
+    <div>
+
+    </div>
+</head>
+
+<body>
+<div style="background:#ff4d4d">
+<table class="table table-bordered" style="margin-top:100px;">
+  <thead>
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Score</th>
+      <th scope="col">Timestamp</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for element in results %}
+    <tr>
+      <td>{{ element.student }}</td>
+      <td>{{ element.score }} / {{ questions_result }}</td>
+      <td>{{ element.tijd }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+</body>
+{% endblock %}
