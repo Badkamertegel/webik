@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-
+{% extends "layout.html" %}
 
 {% block title %}
     Play the quiz
@@ -9,29 +8,30 @@
 
 {% if session.user_id %}
 
-</script>
-
 <body>
-    <div style = "text-align: center;" id="refresh">
+    <div style = "text-align: center;" id="game">
         <p>Question {{ count }}: {{ vraag }}</p>
         <p>Category: {{ api_data[0]['category'] }}</p>
         <p>Difficulty: {{ api_data[0]['difficulty'] }}</p>
     </div>
 
 <form action="/game" method="post">
+    <div style="text-align:center;">
 
-    <div class="form-group" style="text-align: center;">
-        <div>
-        <input name = "button" class="button" type="submit" value="{{ a }}"></button>
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ a }}"></button>
         </div>
-        <div>
-        <input name = "button" class="button" type="submit" value="{{ b }}"></button>
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ b }}"></button>
         </div>
-        <div>
-        <input name = "button" class="button" type="submit" value="{{ c }}"></button>
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ c }}"></button>
         </div>
-        <div>
-        <input name = "button" class="button" type="submit" value="{{ d }}"></button>
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ d }}"></button>
         </div>
         <input type="hidden" id="goed" name="answer" value=" {{ goed }} ">
     </div>

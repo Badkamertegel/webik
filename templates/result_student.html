@@ -1,19 +1,19 @@
-
+{% extends "layout.html" %}
 
 {% block title %}
     Result student
 {% endblock %}
 
 {% block main %}
-
-<table class="table">
+<div style="background:#ff4d4d">
+<table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">Username</th>
       <th scope="col">Quiz Name</th>
       <th scope="col">Category</th>
       <th scope="col">Difficulty</th>
-      <th scope="col">Correct</th>
+      <th scope="col">Score</th>
     </tr>
   </thead>
   <tbody>
@@ -26,4 +26,14 @@
     </tr>
   </tbody>
 </table>
+</div>
+
+<body>
+  <center>
+    <form action="homepage">
+      <button style="height:50px; width:200px;" class="btn btn-info btn-lg" type="submit">Return to homepage</button>
+    </form>
+  </center>
+</body>
+
 {% endblock %}

@@ -1,25 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
-</head>
+{% extends "layout.html" %}
 
-<body bgcolor="#E6E6FA">
-    <div class="login_margin">
+{% block title %}
+    Log in
+{% endblock %}
+
+{% block main %}
+<div class = "tekst">
+        Welcome to the TRIVIATOR
+    </div>
+
+    <div class= "leerling">
+        If you are a student and you don't have an account yet, register here:
+    </div>
+<p>
+
+</p>
+<center>
+    <div style="padding: 40px 40px 40px 40px">
+        <li><a href="{{ url_for('register') }}"><button type="button" style="font-family:Impact" class="btn btn-info btn-lg">Register</button></a></li>
+    </div>
+</center>
+
+<body>
+    <div>
         <form action="{{ url_for('login') }}" method="post">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" class="form-control" name="username" placeholder="Username">
+                <input id="login" type="text" class="form-control" name="username" placeholder="Username">
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" class="form-control" name="password" placeholder="Password">
+                <input id="login" type="password" class="form-control" name="password" placeholder="Password">
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-info btn-lg">Login</button>
         </form>
     </div>
 </body>
-
-</html>
+{% endblock %}
