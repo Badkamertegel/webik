@@ -1,20 +1,20 @@
-#README
+# README
 
 De naam die wij hebben gekozen voor de website is: TRIVIATOR. De studenten die aan deze website hebben gewerkt zijn: Ruben Vreeken, Kaan Tastan en Kevin Tran.
 
-#Screenshot:
+# Screenshot:
 
 ![Alt text](/screenshot/screenshot.jpg?raw=true "Screenshot")
 
-#Huidige features:
+# Huidige features:
 
-#Als teacher:
+# Als teacher:
 
 - Een teacher kan een quiz aanmaken en van alle studenten, die de desbetreffende quiz hebben gemaakt, per student de resultaten zien.
 - Deze resultaten worden opgeslagen in een database en kunnen op elk moment worden opgeroepen.
 - Een teacher, wanneer deze registreert, krijg een teacher id van 1. Dit is van belang om de juiste resultaten te zien in results. Deze resultaten zijn anders dan die van de studenten.
 
-#Als student:
+# Als student:
 
 - Een student kan zelf een quiz aanmaken voor zichzelf, of een bestaan quiz joinen. Na het maken van deze quiz, krijgt de student zijn score te zien.
 - Als een student zijn score terug wil zijn, dan kan de student deze terugvinden in results.
@@ -31,7 +31,7 @@ In application.py staan overal comments, zodat jullie weten wat alles doet.
 In de static folder staat het css bestand.
 In de templates folder staan de html pages.
 
-#Wie wat heeft gedaan:
+# Wie wat heeft gedaan:
 
 Ruben Vreeken: Python (Teacher register, result en student_result) en html code.
 Kevin Tran: Python (Game, create, register en helpers.py) en database en html code.
