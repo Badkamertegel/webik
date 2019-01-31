@@ -1,0 +1,50 @@
+body {
+ background-image: url("https://hdqwalls.com/download/triangles-colorful-background-nz-1920x1080.jpg");
+}
+
+form {
+  text-align: center;
+  width: 25%;
+  margin: auto;
+  height: 50px;
+  font-family: Impact;
+  font-size: 30px;
+}
+
+#login {
+    height:50px;
+    font-size:20pt;
+}
+
+#standard {
+    height:50px;
+    font-size:20pt;
+}
+
+#game {
+  font-size: 20pt;
+  margin: 40px 40px 40px 40px;
+  font-family: Impact;
+}
+
+.valign {
+    position: relative;
+    top: 250px;
+}
+
+.tekst{
+  font-style:normal;
+  color:black;
+  text-align:center;
+  padding: 40px 10px;
+  font-size:400%;
+  font-family:Impact;
+}
+
+.leerling{
+  font-style:normal;
+  color:white;
+  text-align:center;
+  font-family:Impact;
+  font-size:200%;
+}

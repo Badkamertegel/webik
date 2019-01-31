@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Play the quiz
+{% endblock %}
+
+{% block main %}
+
+{% if session.user_id %}
+
+<body>
+    <div style = "text-align: center;" id="game">
+        <p>Question {{ count }}: {{ vraag }}</p>
+        <p>Category: {{ api_data[0]['category'] }}</p>
+        <p>Difficulty: {{ api_data[0]['difficulty'] }}</p>
+    </div>
+
+<form action="/game" method="post">
+    <div style="text-align:center;">
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ a }}"></button>
+        </div>
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ b }}"></button>
+        </div>
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ c }}"></button>
+        </div>
+
+        <div id="game">
+        <input name = "button" class="btn btn-dark btn-lg" type="submit" value="{{ d }}"></button>
+        </div>
+        <input type="hidden" id="goed" name="answer" value=" {{ goed }} ">
+    </div>
+</form>
+
+{% endif %}
+
+</body>
+</html>
+
+{% endblock %}

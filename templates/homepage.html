@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Homepage
+{% endblock %}
+
+{% block main %}
+
+{% if session.user_id %}
+<center><form action="{{ url_for('homepage') }}" method="post">
+
+  <p>Join a Quiz</p>
+
+  <div class="form-group" id="standard">
+    <input autocomplete="off" autofocus class="form-control" name ="join" id="login" placeholder="Enter quiz name">
+  </div>
+
+  <div id="standard" class="form-group" style="text-align: center;">
+    <button type="submit" class="btn btn-info btn-lg">Join quiz</button>
+  </div>
+
+</form></center>
+{% endif %}
+
+{% if session.user_id %}
+  <form method = "get" action="/create">
+    <fieldset>
+      <div class = "valign">
+        <p>Create your own Quiz</p>
+        <button style="height:50px; width:200px;" class="btn btn-info btn-lg" type="submit">Create Quiz</button>
+      </div>
+    </fieldset>
+  </form>
+{% endif %}
+
+</body>
+</html>
+
+{% endblock %}
+
