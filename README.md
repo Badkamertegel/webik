@@ -4,7 +4,7 @@ De naam die wij hebben gekozen voor de website is: TRIVIATOR. De studenten die a
 
 # Screenshot:
 
-![Alt text](/screenshot/banaan.jpg?raw=true "Screenshot")
+![Alt text](/screenshot/banaan.png?raw=true "Screenshot")
 
 # Huidige features:
 
