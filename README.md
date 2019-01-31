@@ -6,6 +6,9 @@ De naam die wij hebben gekozen voor de website is: TRIVIATOR. De studenten die a
 
 ![Alt text](/screenshot/banaan.png?raw=true "Screenshot")
 
+# Productvideo
+https://www.youtube.com/watch?v=28mpR-_Ii_M&feature=youtu.be
+
 # Huidige features:
 
 ## Als teacher:
